@@ -148,7 +148,7 @@ function AnimePage() {
               <input
                 ref={inputRef}
                 type="text"
-                placeholder="Search anime..."
+                placeholder="Search items..."
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
                 className="w-full border border-[var(--border)] bg-[var(--background)] text-[var(--foreground)] placeholder-[var(--muted)] px-3 py-2 rounded-lg text-sm focus:outline-none focus:border-[var(--accent)] transition-all duration-200"
@@ -177,7 +177,7 @@ function AnimePage() {
           {!loading && (
             <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-[var(--accent)]/10 border border-[var(--accent)]/20 rounded-full text-xs sm:text-sm text-[var(--accent)] font-medium">
               🎬 {animeList.length}{" "}
-              {animeList.length === 1 ? "Anime" : "Animes"}
+              {animeList.length === 1 ? "Item" : "Items"}
             </div>
           )}
         </div>
