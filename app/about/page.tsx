@@ -1,9 +1,9 @@
 import Link from "next/link";
 
 export const metadata = {
-  title: "About | MLBB Hub",
+  title: "About | BlueBuff",
   description:
-    "Learn more about MLBB Hub — your go-to destination for Mobile Legends wallpapers, hero builds, esports updates, events, guides, and news.",
+    "Learn more about BlueBuff — your go-to destination for MLBB wallpapers, hero builds, esports updates, events, guides, and news.",
 };
 
 export default function AboutPage() {
@@ -17,7 +17,7 @@ export default function AboutPage() {
         </div>
 
         <h1 className="text-5xl md:text-6xl font-extrabold mb-4 text-transparent bg-clip-text bg-gradient-to-r from-[var(--accent)] to-purple-500">
-          About MLBB Hub
+          About BlueBuff
         </h1>
         <p className="text-[var(--muted)] text-lg max-w-2xl mx-auto">
           Your all-in-one arena for MLBB wallpapers, hero builds, esports, and events ⚔️
@@ -31,8 +31,8 @@ export default function AboutPage() {
         </h2>
 
         <p className="text-[var(--muted)] text-lg leading-relaxed max-w-3xl mx-auto mb-8">
-          MLBB Hub was created for players who love the world of Mobile Legends —
-          from intense mythic-ranked battles to storytelling cinematic hero lore.
+          BlueBuff was created for players who love the world of Mobile Legends —
+          from mythic-ranked battles to storytelling cinematic hero lore.
           We wanted a single hub where players could explore:
         </p>
 
@@ -44,8 +44,6 @@ export default function AboutPage() {
         </p>
       </section>
 
-
-
       {/* 💖 Values Section */}
       <section className="py-24 px-6 max-w-6xl mx-auto text-center">
         <h2 className="text-3xl font-semibold mb-12 text-transparent bg-clip-text bg-gradient-to-r from-[var(--accent)] to-purple-400">
@@ -56,7 +54,7 @@ export default function AboutPage() {
           {[
             {
               title: "For the Community",
-              desc: "MLBB Hub is built around players — guides, wallpapers and updates crafted to help you stay ahead in the game.",
+              desc: "BlueBuff is built around players — guides, wallpapers and updates crafted to help you stay ahead in the game.",
               icon: "🌍",
             },
             {
@@ -94,7 +92,7 @@ export default function AboutPage() {
         </div>
 
         <h2 className="text-4xl font-bold mb-4 text-transparent bg-clip-text bg-gradient-to-r from-[var(--accent)] to-purple-400">
-          Join Our MLBB Community 🌌
+          Join the BlueBuff Community
         </h2>
         <p className="text-[var(--muted)] mb-8 max-w-2xl mx-auto text-lg">
           Follow us for wallpapers, hero builds, leaks, esports highlights & MLBB

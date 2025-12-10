@@ -2,13 +2,13 @@
 
 export default function PrivacyPolicy() {
   return (
-    <main className="min-h-screen bg-[var(--background)] text-[var(--foreground)] px-6 py-20">
+    <main className="min-h-screen bg-[var(--background)] text-[var(--foreground)] px-6 py-10">
       <div className="max-w-4xl mx-auto">
         <h1 className="text-4xl font-bold text-[var(--accent)] mb-6">Privacy Policy</h1>
         <p className="text-[var(--muted)] mb-10">Last updated: November 2025</p>
 
         <p className="mb-6 leading-relaxed">
-          At <strong>MLBB Hub</strong>, your privacy is important to us. This Privacy Policy explains how we collect, store, and protect your information when you access our website, explore wallpapers, read blogs, or interact with MLBB-related content.
+          At <strong>BlueBuff</strong>, your privacy is important to us. This Privacy Policy explains how we collect, store, and protect your information when you access our website, explore wallpapers, read blogs, or interact with MLBB-related content.
         </p>
 
         <h2 className="text-2xl font-semibold text-[var(--accent)] mb-3">1. Information We Collect</h2>
@@ -24,7 +24,7 @@ export default function PrivacyPolicy() {
         <p className="mb-6 leading-relaxed">
           Your information helps us:
           <br /><br />
-          • Improve MLBB Hub’s performance and user experience  
+          • Improve BlueBuff’s performance and user experience  
           <br />
           • Customize content such as wallpapers, hero guides, and esports updates  
           <br />
@@ -42,7 +42,7 @@ export default function PrivacyPolicy() {
 
         <h2 className="text-2xl font-semibold text-[var(--accent)] mb-3">4. Third-Party Services</h2>
         <p className="mb-6 leading-relaxed">
-          MLBB Hub may use third-party services such as analytics tools, content delivery networks, or social media integrations.  
+          BlueBuff may use third-party services such as analytics tools, content delivery networks, or social media integrations.  
           These platforms may collect their own usage data through their embedded features.
           <br />
           We recommend reviewing their individual privacy policies for more details.
@@ -73,7 +73,7 @@ export default function PrivacyPolicy() {
         <p className="leading-relaxed">
           For any questions or concerns, reach out to us via{" "}
           <a href="/contact" className="text-[var(--accent)] hover:underline">
-            MLBB Hub Contact
+            BlueBuff Contact
           </a>.
         </p>
       </div>
