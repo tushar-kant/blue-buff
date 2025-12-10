@@ -37,7 +37,7 @@ export default function BlogsHome() {
   ];
 
   return (
- <main className="relative min-h-screen bg-[#06060f] text-white px-6 pb-24 font-oxanium">
+<main className="relative min-h-screen bg-[var(--background)] text-[var(--foreground)] px-6 pb-24 font-oxanium">
 
 
 

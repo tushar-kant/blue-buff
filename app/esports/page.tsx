@@ -56,7 +56,7 @@ export default function EsportsHome() {
   ];
 
   return (
-    <main className="relative min-h-screen bg-[#050510] text-white overflow-hidden font-oxanium">
+<main className="relative min-h-screen bg-[var(--background)] text-[var(--foreground)] overflow-hidden font-oxanium">
 
       {/* Background Glow */}
       <div className="absolute inset-0 -z-10 opacity-30">

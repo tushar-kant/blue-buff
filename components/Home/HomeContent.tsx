@@ -89,12 +89,13 @@ const articles = [
   ];
 
   // ⭐ Stats Section
-  const stats = [
-    { number: "500+", label: " Wallpapers" },
-    { number: "100+", label: "Total blogs" },
-    { number: "80+", label: "Heroes Covered" },
-    { number: "Daily", label: "New Uploads" },
-  ];
+const stats = [
+  { number: "800+", label: "Wallpapers Uploaded" },
+  { number: "150+", label: "Blogs & Guides" },
+  { number: "100+", label: "Heroes & Skins Covered" },
+  { number: "Daily", label: "New Updates Posted" },
+];
+
 
   return (
     <section className="bg-[var(--background)] text-[var(--foreground)] relative z-10 overflow-hidden">
@@ -105,7 +106,7 @@ const articles = [
       <div className="w-full bg-[var(--card)] border-b border-[var(--border)] py-16">
         <div className="max-w-6xl mx-auto px-6 text-center">
           <h2 className="text-3xl sm:text-4xl font-extrabold mb-10 tracking-wide text-[var(--accent)]">
-            MLBB Hub Stats
+            Blue Buff Stats
           </h2>
 
           <div className="grid grid-cols-2 md:grid-cols-4 gap-10">

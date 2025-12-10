@@ -22,7 +22,7 @@ export default function HeroSection() {
       {/* 🖋 Title */}
       <div className="relative -translate-y-12">
         <h1 className="text-6xl md:text-8xl font-extrabold mb-6 tracking-tight drop-shadow-lg">
-          <span className="text-[var(--accent)]">Blue</span>
+          <span className="text-[var(--accent)]">BLUE</span>
           <span className="text-[var(--foreground)]"> BUFF</span>
         </h1>
         <p className="text-[var(--muted)] text-xl max-w-2xl mx-auto mb-10 leading-relaxed">
@@ -84,7 +84,7 @@ export default function HeroSection() {
         value={search}
         onChange={(e) => setSearch(e.target.value)}
         placeholder="Search Heroes, Wallpapers, MLBB News..."
-        className="w-full p-5 pl-14 text-lg rounded-full bg-[var(--card)] text-[var(--foreground)] border border-[var(--border)] focus:outline-none focus:ring-4 focus:ring-[var(--accent)] shadow-lg transition-all duration-300 placeholder:text-[var(--muted)]"
+        className="w-full p-4 pl-12 text-lg rounded-full bg-[var(--card)] text-[var(--foreground)] border border-[var(--border)] focus:outline-none focus:ring-4 focus:ring-[var(--accent)] shadow-lg transition-all duration-300 placeholder:text-[var(--muted)]"
       />
       <svg
         className="absolute left-5 top-1/2 transform -translate-y-1/2 w-6 h-6 text-[var(--muted)]"
