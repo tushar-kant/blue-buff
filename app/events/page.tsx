@@ -58,7 +58,7 @@ export default function EventsComingSoon() {
   }));
 
   return (
-    <main className="relative min-h-screen flex flex-col items-center bg-[var(--background)] text-[var(--foreground)] px-4 md:px-6 overflow-hidden py-20">
+    <main className="relative min-h-screen flex flex-col items-center bg-[var(--background)] text-[var(--foreground)] px-4 md:px-6 overflow-hidden py-10">
 
       {/* Glow Background */}
       <div className="absolute inset-0 -z-10">

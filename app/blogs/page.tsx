@@ -1,144 +1,176 @@
 "use client";
 
+import { useState, useRef, useEffect } from "react";
 import Image from "next/image";
 import logo from "@/public/logo.png";
 
 export default function BlogsHome() {
+  const [open, setOpen] = useState(false);
+  const wrapperRef = useRef(null);
+
   const categories = [
     { name: "Hero Guides", icon: "📘" },
-    { name: "Builds & Emblems", icon: "⚔️" },
+    { name: "Builds", icon: "⚔️" },
     { name: "Esports", icon: "🔥" },
     { name: "MLBB Tips", icon: "🎯" },
     { name: "Tier Lists", icon: "🏆" },
+    { name: "Updates", icon: "📝" },
+  ];
+
+  const topArticles = [
+    { title: "Strongest Early Game Heroes Ranked", image: "" },
+    { title: "Meta Tanks You Must Master", image: "" },
+    { title: "Best 2025 Emblem Setups", image: "" },
   ];
 
   const featured = {
     title: "Top 10 Assassin Heroes to Rank Up Fast",
-    desc: "A breakdown of the strongest assassins in the current meta, best builds, and gameplay tips.",
-    image: "", // empty = will show default logo
+    desc: "A complete breakdown of the strongest assassins in the current meta.",
+    image: "",
   };
 
   const latestBlogs = [
-    {
-      title: "Best Mage Builds for 2025 Season",
-      date: "12 Jan 2025",
-      image: "",
-    },
-    {
-      title: "How to Counter OP Marksmen in Late Game",
-      date: "10 Jan 2025",
-      image: "",
-    },
-    {
-      title: "MLBB Esports 2025 Roadmap Breakdown",
-      date: "9 Jan 2025",
-      image: "",
-    },
+    { title: "Best Mage Builds for 2025 Season", date: "12 Jan 2025", image: "" },
+    { title: "How to Counter OP Marksmen in Late Game", date: "10 Jan 2025", image: "" },
+    { title: "MLBB Esports 2025 Roadmap Breakdown", date: "9 Jan 2025", image: "" },
   ];
 
+  // close dropdown on outside click
+  useEffect(() => {
+    function handleClickOutside(e: MouseEvent) {
+      if (wrapperRef.current && !(wrapperRef.current as any).contains(e.target)) {
+        setOpen(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
   return (
-<main className="relative min-h-screen bg-[var(--background)] text-[var(--foreground)] px-6 pb-24 font-oxanium">
+    <main className="min-h-screen px-4 sm:px-6 pb-24 font-oxanium bg-[var(--background)] text-[var(--foreground)]">
 
+      {/* 🔥 SEARCH + DROPDOWN SIDE BY SIDE */}
+      <section className="pt-10 max-w-6xl mx-auto lg:flex lg:items-center lg:justify-between gap-6">
 
-
-  {/* HERO SECTION */}
-  <section className="pt-28 pb-20 text-center">
-
-    <div className="mt-10 max-w-2xl mx-auto relative">
-      <input
-        placeholder="Search guides, heroes, builds..."
-        className="w-full px-6 py-4 rounded-2xl bg-white/5 backdrop-blur-xl 
-        border border-white/10 text-lg outline-none 
-        focus:border-purple-400 transition placeholder-gray-400 shadow-lg"
-      />
-
-      {/* Search Icon */}
-      <span className="absolute right-5 top-1/2 -translate-y-1/2 text-gray-400 text-xl">🔍</span>
-    </div>
-  </section>
-
-  {/* CATEGORIES */}
-  <section className="max-w-6xl mx-auto mt-14">
-    <div className="flex items-center justify-between mb-6">
-      <h2 className="text-4xl font-bold">Categories</h2>
-      <div className="w-24 h-[3px] bg-gradient-to-r from-purple-400 to-pink-500 rounded-full" />
-    </div>
-
-    <div className="grid grid-cols-2 md:grid-cols-5 gap-6">
-      {categories.map((c, i) => (
-        <div
-          key={i}
-          className="p-6 rounded-xl bg-white/5 backdrop-blur-xl border border-white/10 
-          shadow hover:shadow-[0_0_25px_rgba(168,85,247,0.5)] 
-          hover:border-purple-400/50 hover:scale-[1.06] transition-all cursor-pointer text-center"
-        >
-          <div className="text-4xl mb-2">{c.icon}</div>
-          <p className="text-lg font-semibold tracking-wide">{c.name}</p>
-        </div>
-      ))}
-    </div>
-  </section>
-
-  {/* FEATURED POST */}
-  <section className="max-w-6xl mx-auto mt-24">
-    <h2 className="text-4xl font-bold mb-6">Featured Guide ⭐</h2>
-
-    <div
-      className="relative rounded-2xl overflow-hidden bg-white/5 backdrop-blur-xl 
-      border border-white/10 shadow-2xl cursor-pointer group"
-    >
-      <Image
-        src={featured.image || logo}
-        width={1200}
-        height={600}
-        alt="featured blog"
-        className="w-full h-80 object-cover opacity-90 group-hover:opacity-100 
-        group-hover:scale-105 transition-all"
-      />
-
-      <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
-
-      <div className="absolute bottom-6 left-6 right-6">
-        <h3 className="text-3xl font-bold group-hover:text-purple-400 transition">
-          {featured.title}
-        </h3>
-        <p className="text-gray-300 mt-2 text-lg">{featured.desc}</p>
-      </div>
-    </div>
-  </section>
-
-  {/* LATEST BLOGS */}
-  <section className="max-w-6xl mx-auto mt-24">
-    <h2 className="text-4xl font-bold mb-6">Latest Blogs</h2>
-
-    <div className="grid md:grid-cols-3 gap-8">
-      {latestBlogs.map((b, i) => (
-        <div
-          key={i}
-          className="rounded-2xl overflow-hidden bg-white/5 backdrop-blur-xl 
-          border border-white/10 shadow-lg hover:shadow-[0_0_30px_rgba(139,92,246,0.5)] 
-          hover:border-purple-400/50 cursor-pointer group transition-all"
-        >
-          <Image
-            src={b.image || logo}
-            width={500}
-            height={300}
-            alt="blog"
-            className="w-full h-48 object-cover group-hover:scale-105 transition-all"
+        {/* Search */}
+        <div className="w-full lg:w-1/2 relative">
+          <input
+            placeholder="Search heroes, builds, guides..."
+            className="w-full px-5 py-3 rounded-xl bg-white/5 border border-white/10
+            outline-none text-base shadow focus:border-purple-400 transition"
           />
+          <span className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400">🔍</span>
+        </div>
 
-          <div className="p-5">
-            <h3 className="text-xl font-semibold group-hover:text-purple-400 transition">
-              {b.title}
-            </h3>
-            <p className="text-gray-400 mt-1">{b.date}</p>
+        {/* Dropdown */}
+        <div className="w-full lg:w-1/3 mt-6 lg:mt-0 relative" ref={wrapperRef}>
+          <button
+            onClick={() => setOpen(!open)}
+            className="w-full px-5 py-3 bg-white/5 border border-white/10 rounded-xl 
+            flex justify-between items-center text-base hover:border-purple-400 transition"
+          >
+            <span>Select category</span>
+            <span className={`transition transform ${open ? "rotate-180" : ""}`}>▼</span>
+          </button>
+
+          {open && (
+            <div className="absolute w-full mt-2 bg-white/5 backdrop-blur-xl border border-white/10 
+            rounded-xl shadow-xl overflow-hidden z-20 animate-fadeIn">
+
+              {categories.map((c, i) => (
+                <div
+                  key={i}
+                  onClick={() => setOpen(false)}
+                  className="px-5 py-3 flex items-center gap-3 cursor-pointer 
+                  hover:bg-purple-500/20 transition text-base"
+                >
+                  <span className="text-lg">{c.icon}</span>
+                  <span>{c.name}</span>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+
+      </section>
+
+      {/* 🏆 TOP ARTICLES */}
+      <section className="mt-12 max-w-6xl mx-auto">
+        <h2 className="text-2xl sm:text-3xl font-bold mb-4">Top Articles</h2>
+
+        <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-6">
+          {topArticles.map((t, i) => (
+            <div
+              key={i}
+              className="bg-white/5 p-4 border border-white/10 rounded-xl hover:border-purple-400/40 hover:shadow-xl transition cursor-pointer"
+            >
+              <Image
+                src={t.image || logo}
+                width={500}
+                height={300}
+                alt="top article"
+                className="w-full h-40 object-cover rounded-xl"
+              />
+              <h3 className="mt-3 text-lg font-semibold">{t.title}</h3>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* ⭐ FEATURED */}
+      <section className="mt-14 max-w-6xl mx-auto">
+        <h2 className="text-2xl sm:text-3xl font-bold mb-4">Featured Guide ⭐</h2>
+
+        <div className="bg-white/5 border border-white/10 rounded-2xl p-5 sm:p-7 
+        flex flex-col sm:flex-row gap-6 hover:border-purple-400/40 transition shadow-xl">
+
+          <div className="w-full sm:w-1/2">
+            <Image
+              src={featured.image || logo}
+              width={600}
+              height={400}
+              alt="featured"
+              className="w-full h-52 object-cover rounded-xl"
+            />
+          </div>
+
+          <div className="w-full sm:w-1/2 flex flex-col justify-center">
+            <h3 className="text-xl sm:text-2xl font-bold mb-2">{featured.title}</h3>
+            <p className="text-gray-300 text-sm sm:text-base">{featured.desc}</p>
+
+            <button className="mt-4 px-5 py-2 bg-purple-600 hover:bg-purple-700 rounded-lg 
+            text-white text-sm sm:text-base transition">
+              Read Guide →
+            </button>
           </div>
         </div>
-      ))}
-    </div>
-  </section>
+      </section>
 
-</main>
+      {/* 📰 LATEST BLOGS */}
+      <section className="mt-14 max-w-6xl mx-auto">
+        <h2 className="text-2xl sm:text-3xl font-bold mb-6">Latest Blogs</h2>
 
+        <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-6">
+          {latestBlogs.map((b, i) => (
+            <div
+              key={i}
+              className="rounded-2xl bg-white/5 border border-white/10 p-3 cursor-pointer 
+              hover:border-purple-400/40 hover:shadow-lg transition"
+            >
+              <Image
+                src={b.image || logo}
+                width={500}
+                height={300}
+                alt="blog"
+                className="w-full h-40 object-cover rounded-xl"
+              />
+              <h3 className="mt-3 text-lg font-semibold">{b.title}</h3>
+              <p className="text-gray-400 text-sm mt-1">{b.date}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+    </main>
   );
 }
