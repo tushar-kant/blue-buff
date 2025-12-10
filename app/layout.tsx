@@ -3,7 +3,7 @@ import "./globals.css";
 import Header from "@/components/Header/Header";
 import Footer from "@/components/Footer/Footer";
 import SocialFloat from "@/components/SocialFloat/SocialFloat";
-
+import { GoogleAnalytics } from '@next/third-parties/google'
 
 export const metadata: Metadata = {
   title: "Zynx Wallpapers | Anime PFPs & Wallpapers",
@@ -24,6 +24,7 @@ export default function RootLayout({
               <SocialFloat />
 
       </body>
+       <GoogleAnalytics gaId="G-XS42JM8W7L" />
     </html>
   );
 }
