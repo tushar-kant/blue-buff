@@ -1,37 +1,38 @@
-export const attackOnTitanCharacters = [
+export const marksmanHeroes = [
   {
-    id: "401",
-    slug: "eren-yeager",
-    name: "Eren Yeager",
-    description: "A determined soldier who vows to destroy all Titans.",
+    id: "501",
+    slug: "miya",
+    name: "Miya",
+    description:
+      "A swift moonlight archer capable of unleashing rapid arrows, strong scaling damage, and powerful chase-down abilities.",
     image:
-      "https://res.cloudinary.com/dk0sslz1q/image/upload/v1762932902/generated-image_1_tgq2e6.jpg",
+      "",
   },
   {
-    id: "402",
-    slug: "armin-arlert",
-    name: "Armin Arlert",
+    id: "502",
+    slug: "lesley",
+    name: "Lesley",
     description:
-      "A brilliant strategist and loyal friend, known for his intellect and compassion.",
+      "A stealthy sniper who excels at long-range assassinations, burst crit shots, and outplay potential.",
     image:
-      "https://res.cloudinary.com/dk0sslz1q/image/upload/v1762667862/bregre_bdvuec.jpg",
+      "",
   },
   {
-    id: "403",
-    slug: "mikasa-ackerman",
-    name: "Mikasa Ackerman",
+    id: "503",
+    slug: "karrie",
+    name: "Karrie",
     description:
-      "A fierce warrior and protector of Eren, unmatched in her combat skills.",
+      "A high-speed marksman designed to shred tanks with her True Damage—perfect for breaking frontline defenses.",
     image:
-      "https://res.cloudinary.com/dk0sslz1q/image/upload/v1762667953/vgfergreg_yl2e4q.jpg",
+      "",
   },
   {
-    id: "404",
-    slug: "levi-ackerman",
-    name: "Levi Ackerman",
+    id: "504",
+    slug: "granger",
+    name: "Granger",
     description:
-      "Humanity’s strongest soldier, known for his speed, precision, and calm demeanor.",
+      "A sharpshooter who wields a violin-turned-gun, delivering rhythmic burst shots with deadly accuracy.",
     image:
-      "https://res.cloudinary.com/dk0sslz1q/image/upload/v1762667872/aybnqy8qlvchludpogxc_vcdd6q.jpg",
+      "",
   },
 ];

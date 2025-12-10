@@ -35,13 +35,13 @@ export default function HeroSection() {
 
       {/* 🔍 Search UI only */}
   {/* 🔼 Breadcrumb on Top */}
-{/* <div className="max-w-3xl mx-auto w-full mb-6 -translate-y-8">
+<div className="max-w-3xl mx-auto w-full mb-6 -translate-y-8">
   <div className="flex justify-center">
     <div className="inline-flex items-center gap-1 bg-[var(--card)] border border-[var(--border)] rounded-full px-1 py-2 shadow-sm">
 
       <Link
         href="/wallpaper"
-        className="px-5 py-1.5 rounded-full text-sm font-medium text-[var(--muted)] hover:text-[var(--accent)] transition-all duration-300"
+        className="px-1 py-1.5 rounded-full text-sm font-medium text-[var(--muted)] hover:text-[var(--accent)] transition-all duration-300"
       >
         /wallpaper
       </Link>
@@ -50,7 +50,7 @@ export default function HeroSection() {
 
       <Link
         href="/events"
-        className="px-5 py-1.5 rounded-full text-sm font-medium text-[var(--muted)] hover:text-[var(--accent)] transition-all duration-300"
+        className="px-1 py-1.5 rounded-full text-sm font-medium text-[var(--muted)] hover:text-[var(--accent)] transition-all duration-300"
       >
         /events
       </Link>
@@ -59,19 +59,21 @@ export default function HeroSection() {
 
       <Link
         href="/esports"
-        className="px-5 py-1.5 rounded-full text-sm font-medium text-[var(--muted)] hover:text-[var(--accent)] transition-all duration-300"
+        className="px-1 py-1.5 rounded-full text-sm font-medium text-[var(--muted)] hover:text-[var(--accent)] transition-all duration-300"
       >
         /esports
       </Link>
+            <span className="text-[var(--muted)]">|</span>
+
            <Link
         href="/blogs"
-        className="px-5 py-1.5 rounded-full text-sm font-medium text-[var(--muted)] hover:text-[var(--accent)] transition-all duration-300"
+        className="px-1 py-1.5 rounded-full text-sm font-medium text-[var(--muted)] hover:text-[var(--accent)] transition-all duration-300"
       >
         /blogs
       </Link>
     </div>
   </div>
-</div> */}
+</div>
 
 {/* 🔍 Search Below */}
 <div className="max-w-3xl mx-auto w-full relative -translate-y-8">

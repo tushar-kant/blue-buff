@@ -1,38 +1,21 @@
-export const jujutsuKaisenCharacters = [
+export const supportHeroes = [
   {
-    id: "601",
-    slug: "satoru-gojo",
-    name: "Satoru Gojo",
+    id: "701",
+    slug: "rafaela",
+    name: "Rafaela",
     description:
-      "The strongest jujutsu sorcerer, known for his Limitless technique and Six Eyes, unmatched in both power and confidence.",
+      "An angelic healer who restores allies’ HP, boosts movement speed, and controls enemies with stunning light.",
     image:
-      "https://res.cloudinary.com/dk0sslz1q/image/upload/v1762668092/eoxrwnrwrdrshdefsvws_uxowbw.jpg",
+      "",
   },
   {
-    id: "602",
-    slug: "yuji-itadori",
-    name: "Yuji Itadori",
+    id: "702",
+    slug: "estes",
+    name: "Estes",
     description:
-      "A kind-hearted and athletic student who becomes the host of Ryomen Sukuna, fighting to protect others from curses.",
+      "The Moon Elf King who provides powerful healing over time, sustaining teams through long skirmishes and teamfights.",
     image:
-      "https://res.cloudinary.com/dk0sslz1q/image/upload/v1762668111/ffsgesge_dkcbtm.jpg",
+      "",
   },
-  {
-    id: "603",
-    slug: "megumi-fushiguro",
-    name: "Megumi Fushiguro",
-    description:
-      "A calm and strategic jujutsu sorcerer who uses the Ten Shadows Technique to summon shikigami in battle.",
-    image:
-      "https://res.cloudinary.com/dk0sslz1q/image/upload/v1762668095/fewfew_fruify.jpg",
-  },
-  {
-    id: "604",
-    slug: "nobara-kugisaki",
-    name: "Nobara Kugisaki",
-    description:
-      "A fierce and confident sorcerer who fights curses with her hammer and nails, balancing strength and style.",
-    image:
-      "https://res.cloudinary.com/dk0sslz1q/image/upload/v1762668106/efewfwegeg4e_f9pnjh.jpg",
-  },
+
 ];

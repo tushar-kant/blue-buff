@@ -1,33 +1,34 @@
 import { NextResponse } from "next/server";
 
-import { narutoCharacters } from "./data/naruto";
-import { onePieceCharacters } from "./data/one-piece";
-import { attackOnTitanCharacters } from "./data/aot";
-import { bleachCharacters } from "./data/bleach";
-import { demonSlayerCharacters } from "./data/demonslayer";
-import { jujutsuKaisenCharacters } from "./data/jjk";
-import { onePunchManCharacters } from "./data/onepunch";
-import { soloLevelingCharacters } from "./data/sololeveling";
-import { myHeroAcademiaCharacters } from "./data/myheroaccademia";
-import { fullmetalAlchemistCharacters } from "./data/fullmetalalchemist";
-import { dragonBallCharacters } from "./data/dragonballl";
-import { deathNoteCharacters } from "./data/deathnote";
+import { tankHeroes } from "./data/naruto";
+import { mageHeroes } from "./data/one-piece";
+import { marksmanHeroes } from "./data/aot";
+import { fighterHeroes } from "./data/bleach";
+import { assassinHeroes } from "./data/demonslayer";
+import { supportHeroes } from "./data/jjk";
+
+
 
 // 🧩 Combine all anime characters
+// const characters = {
+//   "naruto": narutoCharacters,
+//   "one-piece": onePieceCharacters,
+//   "bleach": bleachCharacters,
+//   "attack-on-titan": attackOnTitanCharacters,
+//   "demon-slayer": demonSlayerCharacters,
+//   "jujutsu-kaisen": jujutsuKaisenCharacters,
+
+ 
+// };
 const characters = {
-  "naruto": narutoCharacters,
-  "one-piece": onePieceCharacters,
-  "bleach": bleachCharacters,
-  "attack-on-titan": attackOnTitanCharacters,
-  "demon-slayer": demonSlayerCharacters,
-  "jujutsu-kaisen": jujutsuKaisenCharacters,
-  "one-punch-man": onePunchManCharacters,
-  "death-note": deathNoteCharacters,
-  "fullmetal-alchemist": fullmetalAlchemistCharacters,
-  "my-hero-academia": myHeroAcademiaCharacters,
-  "solo-leveling": soloLevelingCharacters,
-  "dragon-ball": dragonBallCharacters,
+  "tank": tankHeroes,
+  "mage": mageHeroes,
+  "fighter": fighterHeroes,
+  "marksman": marksmanHeroes,
+  "assassin": assassinHeroes,
+  "support": supportHeroes,
 };
+
 
 export async function GET(request: Request) {
   try {
