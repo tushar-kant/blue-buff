@@ -75,7 +75,7 @@ export default function BlogsHome() {
     },
   ];
 
-  // close dropdown on outside click
+  // Close dropdown on outside click
   useEffect(() => {
     function handleClickOutside(e: MouseEvent) {
       if (wrapperRef.current && !(wrapperRef.current as any).contains(e.target)) {
@@ -89,15 +89,20 @@ export default function BlogsHome() {
   return (
     <main className="min-h-screen px-4 sm:px-6 pb-24 font-oxanium bg-[var(--background)] text-[var(--foreground)]">
 
-      {/* SEARCH + DROPDOWN */}
+      {/* ================= SEARCH + DROPDOWN ================= */}
       <section className="pt-10 max-w-6xl mx-auto lg:flex lg:items-center lg:justify-between gap-6">
 
         {/* Search */}
         <div className="w-full lg:w-1/2 relative">
           <input
             placeholder="Search heroes, builds, guides..."
-            className="w-full px-5 py-3 rounded-xl bg-white/5 border border-white/10 outline-none
-            text-base shadow focus:border-[var(--accent)] transition"
+            className="
+              w-full px-5 py-3 rounded-xl
+              bg-white/5 border border-white/10 shadow 
+              outline-none text-base 
+              focus:border-[var(--accent)]
+              transition
+            "
           />
           <span className="absolute right-4 top-1/2 -translate-y-1/2 text-[var(--muted)]">🔍</span>
         </div>
@@ -106,23 +111,35 @@ export default function BlogsHome() {
         <div className="w-full lg:w-1/3 mt-6 lg:mt-0 relative" ref={wrapperRef}>
           <button
             onClick={() => setOpen(!open)}
-            className="w-full px-5 py-3 bg-white/5 border border-white/10 rounded-xl 
-            flex justify-between items-center text-base hover:border-[var(--accent)] transition"
+            className="
+              w-full px-5 py-3 rounded-xl 
+              bg-white/5 border border-white/10 
+              flex justify-between items-center 
+              hover:border-[var(--accent)]/40 
+              transition
+            "
           >
             <span>Select category</span>
             <span className={`transition transform ${open ? "rotate-180" : ""}`}>▼</span>
           </button>
 
           {open && (
-            <div className="absolute w-full mt-2 bg-white/5 backdrop-blur-xl border border-white/10 
-            rounded-xl shadow-xl overflow-hidden z-20 animate-fadeIn">
-
+            <div
+              className="
+                absolute w-full mt-2 rounded-xl z-20 shadow-xl overflow-hidden 
+                bg-white/5 backdrop-blur-xl border border-white/10 animate-fadeIn
+              "
+            >
               {categories.map((c, i) => (
                 <div
                   key={i}
                   onClick={() => setOpen(false)}
-                  className="px-5 py-3 flex items-center gap-3 cursor-pointer 
-                  hover:bg-purple-500/20 transition text-base"
+                  className="
+                    px-5 py-3 flex items-center gap-3 
+                    cursor-pointer text-base 
+                    hover:bg-[var(--accent)]/15 
+                    transition
+                  "
                 >
                   <span className="text-lg">{c.icon}</span>
                   <span>{c.name}</span>
@@ -134,84 +151,97 @@ export default function BlogsHome() {
 
       </section>
 
-      {/* TOP ARTICLES */}
-      <section className="mt-12 max-w-6xl mx-auto">
-        <h2 className="text-2xl sm:text-3xl font-bold mb-4 text-[var(--accent)]">Top Articles</h2>
+      {/* ================= TOP ARTICLES ================= */}
+      <SectionTitle title="🔥 Top Articles" />
 
+      <section className="max-w-6xl mx-auto mt-6">
         <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-6">
           {topArticles.map((t, i) => (
             <Link
               key={i}
               href={t.url}
-              className="bg-white/5 p-4 border border-white/10 rounded-xl hover:border-[var(--accent)]/40 
-              hover:shadow-xl transition cursor-pointer block"
+              className="
+                block bg-white/5 p-4 rounded-xl 
+                border border-white/10 
+                hover:border-[var(--accent)]/40 
+                hover:shadow-[0_0_25px_var(--accent)/30]
+                transition
+              "
             >
               <Image
                 src={t.image || logo}
                 width={500}
                 height={300}
-                alt="top article"
+                alt="article"
                 className="w-full h-40 object-cover rounded-xl"
               />
 
-              <span className="inline-block mt-3 px-3 py-1 text-xs bg-purple-600/20 border border-purple-600/30 rounded-full text-purple-300">
-                {t.tag}
-              </span>
+              <Tag>{t.tag}</Tag>
 
-              <h3 className="mt-2 text-lg font-semibold text-[var(--foreground)]">{t.title}</h3>
+              <h4 className="mt-2 text-lg font-semibold">{t.title}</h4>
               <p className="text-[var(--muted)] text-sm">{t.date}</p>
             </Link>
           ))}
         </div>
       </section>
 
-      {/* FEATURED */}
-      <section className="mt-14 max-w-6xl mx-auto">
-        <h2 className="text-2xl sm:text-3xl font-bold mb-4 text-[var(--accent)]">Featured Guide ⭐</h2>
+      {/* ================= FEATURED GUIDE ================= */}
+      <SectionTitle title="⭐ Featured Guide" />
 
+      <section className="max-w-6xl mx-auto mt-6">
         <Link
           href={featured.url}
-          className="bg-white/5 border border-white/10 rounded-2xl p-5 sm:p-7 flex flex-col sm:flex-row 
-          gap-6 hover:border-[var(--accent)]/40 transition shadow-xl"
+          className="
+            flex flex-col sm:flex-row gap-6 
+            p-5 sm:p-7 rounded-2xl bg-white/5 
+            border border-white/10 shadow-xl 
+            hover:border-[var(--accent)]/40 
+            transition
+          "
         >
-          <div className="w-full sm:w-1/2">
-            <Image
-              src={featured.image || logo}
-              width={600}
-              height={400}
-              alt="featured"
-              className="w-full h-52 object-cover rounded-xl"
-            />
-          </div>
+          <Image
+            src={featured.image || logo}
+            width={600}
+            height={400}
+            alt="featured"
+            className="w-full sm:w-1/2 h-52 object-cover rounded-xl"
+          />
 
           <div className="w-full sm:w-1/2 flex flex-col justify-center">
-            <span className="px-3 py-1 text-xs bg-purple-600/20 border border-purple-600/30 rounded-full text-purple-300 w-fit mb-3">
-              {featured.tag}
-            </span>
+            <Tag>{featured.tag}</Tag>
 
-            <h3 className="text-xl sm:text-2xl font-bold mb-2 text-[var(--foreground)]">{featured.title}</h3>
-            <p className="text-[var(--muted)] text-sm sm:text-base">{featured.desc}</p>
+            <h4 className="text-xl sm:text-2xl font-bold mt-2">{featured.title}</h4>
+            <p className="text-[var(--muted)] text-sm mt-2">{featured.desc}</p>
+
             <p className="text-[var(--muted)] text-xs mt-2">{featured.date}</p>
 
-            <button className="mt-4 px-5 py-2 bg-purple-600 hover:bg-purple-700 rounded-lg 
-            text-white text-sm sm:text-base transition w-fit">
+            <button className="
+              mt-4 px-5 py-2 bg-[var(--accent)] 
+              hover:bg-[var(--accent-dark)] 
+              text-white rounded-lg transition
+            ">
               Read Guide →
             </button>
           </div>
         </Link>
       </section>
 
-      {/* LATEST BLOGS */}
-      <section className="mt-14 max-w-6xl mx-auto">
-        <h2 className="text-2xl sm:text-3xl font-bold mb-6 text-[var(--accent)]">Latest Blogs</h2>
+      {/* ================= LATEST BLOGS ================= */}
+      <SectionTitle title="🆕 Latest Blogs" />
 
+      <section className="max-w-6xl mx-auto mt-6">
         <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-6">
           {latestBlogs.map((b, i) => (
             <Link
               key={i}
               href={b.url}
-              className="rounded-2xl bg-white/5 border border-white/10 p-3 cursor-pointer 
-              hover:border-[var(--accent)]/40 hover:shadow-lg transition block"
+              className="
+                block rounded-2xl p-3 
+                bg-white/5 border border-white/10 
+                hover:border-[var(--accent)]/40 
+                hover:shadow-[0_0_25px_var(--accent)/30]
+                transition
+              "
             >
               <Image
                 src={b.image || logo}
@@ -221,17 +251,42 @@ export default function BlogsHome() {
                 className="w-full h-40 object-cover rounded-xl"
               />
 
-              <span className="inline-block mt-3 px-3 py-1 text-xs bg-purple-600/20 border border-purple-600/30 rounded-full text-purple-300">
-                {b.tag}
-              </span>
+              <Tag>{b.tag}</Tag>
 
-              <h3 className="mt-2 text-lg font-semibold text-[var(--foreground)]">{b.title}</h3>
-              <p className="text-[var(--muted)] text-sm mt-1">{b.date}</p>
+              <h4 className="mt-2 text-lg font-semibold">{b.title}</h4>
+              <p className="text-[var(--muted)] text-sm">{b.date}</p>
             </Link>
           ))}
         </div>
       </section>
 
     </main>
+  );
+}
+
+/* ---------------------------- SECTION TITLE ---------------------------- */
+function SectionTitle({ title }: { title: string }) {
+  return (
+    <section className="max-w-6xl mx-auto mt-14 px-4">
+      <h4 className="text-2xl font-bold text-[var(--accent)] flex items-center gap-3">
+        {title}
+        <span className="h-1 w-12 bg-[var(--accent)] rounded-full"></span>
+      </h4>
+    </section>
+  );
+}
+
+/* ---------------------------- TAG COMPONENT ---------------------------- */
+function Tag({ children }: any) {
+  return (
+    <span
+      className="
+        inline-block mt-3 px-3 py-1 text-xs 
+        rounded-full border border-purple-600/40 
+        bg-purple-600/20 text-purple-300
+      "
+    >
+      {children}
+    </span>
   );
 }
