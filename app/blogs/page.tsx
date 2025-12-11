@@ -6,76 +6,41 @@ import Link from "next/link";
 import logo from "@/public/logo.png";
 
 export default function BlogsHome() {
+  // -------------------- STATES --------------------
   const [open, setOpen] = useState(false);
   const wrapperRef = useRef(null);
 
-  const categories = [
-    { name: "Hero Guides", icon: "📘" },
-    { name: "Builds", icon: "⚔️" },
-    { name: "Esports", icon: "🔥" },
-    { name: "MLBB Tips", icon: "🎯" },
-    { name: "Tier Lists", icon: "🏆" },
-    { name: "Updates", icon: "📝" },
-  ];
+  const [loading, setLoading] = useState(true);
+  const [categories, setCategories] = useState<any[]>([]);
+  const [topArticles, setTopArticles] = useState<any[]>([]);
+  const [featured, setFeatured] = useState<any>(null);
+  const [latestBlogs, setLatestBlogs] = useState<any[]>([]);
 
-  const topArticles = [
-    {
-      title: "Strongest Early Game Heroes Ranked",
-      image: "",
-      url: "/blogs/strongest-early-game-heroes",
-      tag: "Hero Guides",
-      date: "5 Jan 2025",
-    },
-    {
-      title: "Meta Tanks You Must Master",
-      image: "",
-      url: "/blogs/meta-tanks-guide",
-      tag: "Builds",
-      date: "3 Jan 2025",
-    },
-    {
-      title: "Best 2025 Emblem Setups",
-      image: "",
-      url: "/blogs/best-emblem-2025",
-      tag: "MLBB Tips",
-      date: "1 Jan 2025",
-    },
-  ];
+  const [search, setSearch] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState("");
 
-  const featured = {
-    title: "Top 10 Assassin Heroes to Rank Up Fast",
-    desc: "A complete breakdown of the strongest assassins in the current meta.",
-    image: "",
-    url: "/blogs/top-10-assassins",
-    tag: "Hero Guides",
-    date: "8 Jan 2025",
-  };
+  // -------------------- FETCH DATA --------------------
+  useEffect(() => {
+    async function load() {
+      try {
+        const res = await fetch("/api/mlbb/blogs/home");
+        const data = await res.json();
 
-  const latestBlogs = [
-    {
-      title: "Best Mage Builds for 2025 Season",
-      date: "12 Jan 2025",
-      image: "",
-      url: "/blogs/best-mage-builds-2025",
-      tag: "Builds",
-    },
-    {
-      title: "How to Counter OP Marksmen in Late Game",
-      date: "10 Jan 2025",
-      image: "",
-      url: "/blogs/counter-marksmen",
-      tag: "MLBB Tips",
-    },
-    {
-      title: "MLBB Esports 2025 Roadmap Breakdown",
-      date: "9 Jan 2025",
-      image: "",
-      url: "/blogs/esports-roadmap-2025",
-      tag: "Esports",
-    },
-  ];
+        setCategories(data.categories || []);
+        setTopArticles(data.topArticles || []);
+        setFeatured(data.featured || null);
+        setLatestBlogs(data.latestBlogs || []);
+      } catch (e) {
+        console.error("Failed loading blogs API", e);
+      } finally {
+        setLoading(false);
+      }
+    }
 
-  // Close dropdown on outside click
+    load();
+  }, []);
+
+  // -------------------- CLOSE DROPDOWN --------------------
   useEffect(() => {
     function handleClickOutside(e: MouseEvent) {
       if (wrapperRef.current && !(wrapperRef.current as any).contains(e.target)) {
@@ -86,15 +51,58 @@ export default function BlogsHome() {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center text-xl font-bold">
+        Loading blogs...
+      </div>
+    );
+  }
+
+  // -------------------- FILTER LOGIC --------------------
+  const searchLower = search.toLowerCase();
+
+  // TOP ARTICLES
+  const filteredTop = topArticles.filter((a) => {
+    const matchCategory = selectedCategory ? a.tag === selectedCategory : true;
+    const matchSearch =
+      a.title.toLowerCase().includes(searchLower) ||
+      a.tag.toLowerCase().includes(searchLower);
+
+    return matchCategory && matchSearch;
+  });
+
+  // FEATURED
+  const filteredFeatured =
+    selectedCategory && featured?.tag !== selectedCategory
+      ? null
+      : search
+      ? featured?.title?.toLowerCase().includes(searchLower)
+        ? featured
+        : null
+      : featured;
+
+  // LATEST BLOGS
+  const filteredLatest = latestBlogs.filter((a) => {
+    const matchCategory = selectedCategory ? a.tag === selectedCategory : true;
+    const matchSearch =
+      a.title.toLowerCase().includes(searchLower) ||
+      a.tag.toLowerCase().includes(searchLower);
+
+    return matchCategory && matchSearch;
+  });
+
   return (
     <main className="min-h-screen px-4 sm:px-6 pb-24 font-oxanium bg-[var(--background)] text-[var(--foreground)]">
 
-      {/* ================= SEARCH + DROPDOWN ================= */}
+      {/* -------------------- SEARCH + DROP -------------------- */}
       <section className="pt-10 max-w-6xl mx-auto lg:flex lg:items-center lg:justify-between gap-6">
 
         {/* Search */}
         <div className="w-full lg:w-1/2 relative">
           <input
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
             placeholder="Search heroes, builds, guides..."
             className="
               w-full px-5 py-3 rounded-xl
@@ -119,9 +127,19 @@ export default function BlogsHome() {
               transition
             "
           >
-            <span>Select category</span>
+            <span>{selectedCategory || "Select category"}</span>
             <span className={`transition transform ${open ? "rotate-180" : ""}`}>▼</span>
           </button>
+
+          {/* CLEAR CATEGORY BUTTON */}
+          {selectedCategory && (
+            <button
+              onClick={() => setSelectedCategory("")}
+              className="absolute right-2 top-1/2 -translate-y-1/2 text-xs text-[var(--accent)]"
+            >
+              Clear
+            </button>
+          )}
 
           {open && (
             <div
@@ -133,7 +151,10 @@ export default function BlogsHome() {
               {categories.map((c, i) => (
                 <div
                   key={i}
-                  onClick={() => setOpen(false)}
+                  onClick={() => {
+                    setSelectedCategory(c.name);
+                    setOpen(false);
+                  }}
                   className="
                     px-5 py-3 flex items-center gap-3 
                     cursor-pointer text-base 
@@ -151,115 +172,124 @@ export default function BlogsHome() {
 
       </section>
 
-
-      {/* ================= TOP ARTICLES ================= */}
+      {/* -------------------- TOP ARTICLES -------------------- */}
       <SectionTitle title="🔥 Top Articles" />
 
       <section className="max-w-6xl mx-auto mt-6">
         <MobileCarousel>
-          {topArticles.map((t, i) => (
-            <Link
-              key={i}
-              href={t.url}
-              className="
-                block bg-white/5 p-4 rounded-xl min-w-[80%] md:min-w-0 snap-start
-                border border-white/10 
-                hover:border-[var(--accent)]/40 
-                hover:shadow-[0_0_25px_var(--accent)/30]
-                transition
-              "
-            >
-              <Image
-                src={t.image || logo}
-                width={500}
-                height={300}
-                alt="article"
-                className="w-full h-40 object-cover rounded-xl"
-              />
+          {filteredTop.length > 0 ? (
+            filteredTop.map((t, i) => (
+              <Link
+                key={i}
+                href={t.url}
+                className="
+                  block bg-white/5 p-4 rounded-xl min-w-[80%] md:min-w-0 snap-start
+                  border border-white/10 
+                  hover:border-[var(--accent)]/40 
+                  hover:shadow-[0_0_25px_var(--accent)/30]
+                  transition
+                "
+              >
+                <Image
+                  src={t.image || logo}
+                  width={500}
+                  height={300}
+                  alt="article"
+                  className="w-full h-40 object-cover rounded-xl"
+                />
 
-              <Tag>{t.tag}</Tag>
+                <Tag>{t.tag}</Tag>
 
-              <h4 className="mt-2 text-lg font-semibold">{t.title}</h4>
-              <p className="text-[var(--muted)] text-sm">{t.date}</p>
-            </Link>
-          ))}
+                <h4 className="mt-2 text-lg font-semibold">{t.title}</h4>
+                <p className="text-[var(--muted)] text-sm">{t.date}</p>
+              </Link>
+            ))
+          ) : (
+            <p className="text-center text-[var(--muted)] w-full">No results found.</p>
+          )}
         </MobileCarousel>
       </section>
 
-
-      {/* ================= FEATURED GUIDE ================= */}
+      {/* -------------------- FEATURED GUIDE -------------------- */}
       <SectionTitle title="⭐ Featured Guide" />
 
       <section className="max-w-6xl mx-auto mt-6">
-        <Link
-          href={featured.url}
-          className="
-            flex flex-col sm:flex-row gap-6 
-            p-5 sm:p-7 rounded-2xl bg-white/5 
-            border border-white/10 shadow-xl 
-            hover:border-[var(--accent)]/40 
-            transition
-          "
-        >
-          <Image
-            src={featured.image || logo}
-            width={600}
-            height={400}
-            alt="featured"
-            className="w-full sm:w-1/2 h-52 object-cover rounded-xl"
-          />
+        {filteredFeatured ? (
+          <Link
+            href={filteredFeatured.url}
+            className="
+              flex flex-col sm:flex-row gap-6 
+              p-5 sm:p-7 rounded-2xl bg-white/5 
+              border border-white/10 shadow-xl 
+              hover:border-[var(--accent)]/40 
+              transition
+            "
+          >
+            <Image
+              src={filteredFeatured.image || logo}
+              width={600}
+              height={400}
+              alt="featured"
+              className="w-full sm:w-1/2 h-52 object-cover rounded-xl"
+            />
 
-          <div className="w-full sm:w-1/2 flex flex-col justify-center">
-            <Tag>{featured.tag}</Tag>
+            <div className="w-full sm:w-1/2 flex flex-col justify-center">
+              <Tag>{filteredFeatured.tag}</Tag>
 
-            <h4 className="text-xl sm:text-2xl font-bold mt-2">{featured.title}</h4>
-            <p className="text-[var(--muted)] text-sm mt-2">{featured.desc}</p>
+              <h4 className="text-xl sm:text-2xl font-bold mt-2">{filteredFeatured.title}</h4>
+              <p className="text-[var(--muted)] text-sm mt-2">{filteredFeatured.desc}</p>
 
-            <p className="text-[var(--muted)] text-xs mt-2">{featured.date}</p>
+              <p className="text-[var(--muted)] text-xs mt-2">{filteredFeatured.date}</p>
 
-            <button className="
-              mt-4 px-5 py-2 bg-[var(--accent)] 
-              hover:bg-[var(--accent-dark)] 
-              text-white rounded-lg transition
-            ">
-              Read Guide →
-            </button>
-          </div>
-        </Link>
+              <button className="
+                mt-4 px-5 py-2 bg-[var(--accent)] 
+                hover:bg-[var(--accent-dark)] 
+                text-white rounded-lg transition
+              ">
+                Read Guide →
+              </button>
+            </div>
+          </Link>
+        ) : (
+          <p className="text-center text-[var(--muted)]">No featured guide found.</p>
+        )}
       </section>
 
-
-      {/* ================= LATEST BLOGS ================= */}
+      {/* -------------------- LATEST BLOGS -------------------- */}
       <SectionTitle title="🆕 Latest Blogs" />
 
       <section className="max-w-6xl mx-auto mt-6">
         <MobileCarousel>
-          {latestBlogs.map((b, i) => (
-            <Link
-              key={i}
-              href={b.url}
-              className="
-                block rounded-2xl p-3 min-w-[80%] md:min-w-0 snap-start
-                bg-white/5 border border-white/10 
-                hover:border-[var(--accent)]/40 
-                hover:shadow-[0_0_25px_var(--accent)/30]
-                transition
-              "
-            >
-              <Image
-                src={b.image || logo}
-                width={500}
-                height={300}
-                alt="blog"
-                className="w-full h-40 object-cover rounded-xl"
-              />
+          {filteredLatest.length > 0 ? (
+            filteredLatest.map((b, i) => (
+              <Link
+                key={i}
+                href={b.url}
+                className="
+                  block rounded-2xl p-3 min-w-[80%] md:min-w-0 snap-start
+                  bg-white/5 border border-white/10 
+                  hover:border-[var(--accent)]/40 
+                  hover:shadow-[0_0_25px_var(--accent)/30]
+                  transition
+                "
+              >
+                <Image
+                  src={b.image || logo}
+                  width={500}
+                  height={300}
+                  alt="blog"
+                  className="w-full h-40 object-cover rounded-xl"
+                />
 
-              <Tag>{b.tag}</Tag>
+                <Tag>{b.tag}</Tag>
 
-              <h4 className="mt-2 text-lg font-semibold">{b.title}</h4>
-              <p className="text-[var(--muted)] text-sm">{b.date}</p>
-            </Link>
-          ))}
+                <h4 className="mt-2 text-lg font-semibold">{b.title}</h4>
+                <p className="text-[var(--muted)] text-sm">{b.date}</p>
+              </Link>
+            ))
+          ) : (
+            <p className="text-center text-[var(--muted)] w-full">No blogs found.</p>
+          )}
         </MobileCarousel>
       </section>
 

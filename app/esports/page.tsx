@@ -1,48 +1,55 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import logo from "@/public/logo.png";
 
 export default function EsportsHome() {
-  const liveMatches = [
-    {
-      id: 1,
-      teams: ["Blacklist", "ONIC"],
-      status: "Live Now",
-      image: "",
-      youtube: "https://www.youtube.com/watch?v=XXXXX",
-    },
-    {
-      id: 2,
-      teams: ["RRQ", "Falcon"],
-      status: "Live Now",
-      image: "",
-      youtube: "https://www.youtube.com/watch?v=YYYYY",
-    },
-  ];
+  // API STATE
+  const [liveMatches, setLiveMatches] = useState([]);
+  const [tournaments, setTournaments] = useState([]);
+  const [communityTournaments, setCommunityTournaments] = useState([]);
+  const [news, setNews] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-  const tournaments = [
-    { title: "M6 World Championship", date: "Dec 2025", prize: "$1,000,000", image: "" },
-    { title: "MPL PH Season 14", date: "March 2026", prize: "$300,000", image: "" },
-  ];
+  // FETCH API ON LOAD
+  useEffect(() => {
+    async function load() {
+      try {
+        const res = await fetch("/api/mlbb/esports/home");
+        const json = await res.json();
 
-  const news = [
-    { title: "ONIC Crowned Champion — Recap", date: "12 Jan 2025", image: "" },
-    { title: "M6 Group Draw Results", date: "10 Jan 2025", image: "" },
-    { title: "RRQ Roster Shuffle 2025", date: "8 Jan 2025", image: "" },
-  ];
+        setLiveMatches(json.liveMatches);
+        setTournaments(json.tournaments);
+        setCommunityTournaments(json.communityTournaments);
+        setNews(json.news);
+      } catch (err) {
+        console.error("Failed to load esports data", err);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    load();
+  }, []);
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center text-xl font-bold">
+        Loading esports data...
+      </div>
+    );
+  }
 
   return (
     <main className="relative min-h-screen bg-[var(--background)] text-[var(--foreground)] font-oxanium">
-
 
       {/* ------------------ LIVE MATCHES ------------------ */}
       <SectionTitle title="🔥 Live Matches" subtitle="Real-time MLBB esports action" />
 
       <section className="max-w-6xl mx-auto mt-6">
         <MobileCarousel>
-          {liveMatches.map((m) => (
+          {liveMatches.map((m: any) => (
             <a
               key={m.id}
               href={m.youtube}
@@ -50,14 +57,10 @@ export default function EsportsHome() {
               rel="noopener noreferrer"
               className="block min-w-[80%] md:min-w-0 snap-start"
             >
-              <div
-                className="relative group bg-gradient-to-br from-[#0f1326] to-[#1b1f36]
+              <div className="relative group bg-gradient-to-br from-[#0f1326] to-[#1b1f36]
                 border border-white/10 rounded-2xl shadow-2xl overflow-hidden 
                 hover:border-blue-500/50 hover:shadow-[0_0_25px_5px_rgba(0,102,255,0.3)]
-                transition-all duration-300"
-              >
-                <div className="absolute inset-0 opacity-0 group-hover:opacity-100 pointer-events-none 
-                  bg-[linear-gradient(110deg,transparent,rgba(255,255,255,0.15),transparent)] transition duration-700" />
+                transition-all duration-300">
 
                 <Image
                   src={m.image || logo}
@@ -67,13 +70,11 @@ export default function EsportsHome() {
                   className="w-full h-48 object-cover opacity-80 group-hover:scale-105 transition duration-500"
                 />
 
-                <span className="absolute top-4 left-4 px-3 py-1 text-xs bg-red-600 font-semibold rounded-full shadow-lg flex items-center gap-1">
+                <span className="absolute top-4 left-4 px-3 py-1 text-xs bg-red-600 font-semibold rounded-full shadow-lg">
                   🔴 LIVE
                 </span>
 
-                <div className="absolute inset-0 bg-gradient-to-b from-transparent to-black/70" />
-
-                <div className="relative p-5 mt-[-20px]">
+                <div className="relative p-5">
                   <div className="flex items-center justify-between mb-3">
                     <TeamCard name={m.teams[0]} />
                     <span className="text-lg font-bold text-blue-400">VS</span>
@@ -86,13 +87,12 @@ export default function EsportsHome() {
         </MobileCarousel>
       </section>
 
-
       {/* ------------------ UPCOMING TOURNAMENTS ------------------ */}
       <SectionTitle title="🏆 Upcoming Tournaments" subtitle="Major MLBB esports championships" />
 
       <section className="max-w-6xl mx-auto mt-10">
         <MobileCarousel>
-          {tournaments.map((t, i) => (
+          {tournaments.map((t: any, i: number) => (
             <div
               key={i}
               className="group relative rounded-2xl min-w-[80%] md:min-w-0 snap-start 
@@ -123,7 +123,6 @@ export default function EsportsHome() {
         </MobileCarousel>
       </section>
 
-
       {/* ------------------ JOIN TOURNAMENTS ------------------ */}
       <SectionTitle
         title="🎮 Join Tournaments"
@@ -132,26 +131,7 @@ export default function EsportsHome() {
 
       <section className="max-w-6xl mx-auto mt-10">
         <MobileCarousel>
-          {[
-            {
-              name: "Blue Buff Community Cup",
-              reward: "Elite Skin + Diamonds",
-              date: "Every Weekend",
-              image: "",
-            },
-            {
-              name: "MLBB Ranked Rush Tournament",
-              reward: "Starlight Pass Giveaway",
-              date: "Monthly Event",
-              image: "",
-            },
-            {
-              name: "5v5 Squad Battle Arena",
-              reward: "Cash Prize + Hero Fragments",
-              date: "Seasonal",
-              image: "",
-            },
-          ].map((t, i) => (
+          {communityTournaments.map((t: any, i: number) => (
             <div
               key={i}
               className="group relative rounded-2xl min-w-[80%] md:min-w-0 snap-start
@@ -177,7 +157,7 @@ export default function EsportsHome() {
                 </p>
 
                 <a
-                  href="https://wa.me/916372305866"
+                  href={t.link}
                   target="_blank"
                   className="mt-4 w-full py-2 block text-center rounded-lg bg-purple-600 hover:bg-purple-700 
                     text-white font-semibold text-sm transition"
@@ -190,20 +170,16 @@ export default function EsportsHome() {
         </MobileCarousel>
       </section>
 
-
       {/* ------------------ LATEST NEWS ------------------ */}
       <SectionTitle title="📰 Latest News" subtitle="Fresh from the MLBB scene" />
 
       <section className="max-w-6xl mx-auto mt-10 mb-20">
         <MobileCarousel>
-          {news.map((n, i) => (
-            <div
-              key={i}
-              className="group relative rounded-2xl min-w-[80%] md:min-w-0 snap-start
+          {news.map((n: any, i: number) => (
+            <a key={i} href={n.link} className="group relative rounded-2xl min-w-[80%] md:min-w-0 snap-start
               bg-gradient-to-br from-[#111423] to-[#1a1e32]
               border border-white/10 shadow-lg overflow-hidden
-              hover:border-blue-400/40 hover:shadow-blue-500/20 
-              transition-all cursor-pointer"
+              hover:border-blue-400/40 hover:shadow-blue-500/20 transition-all cursor-pointer"
             >
               <Image
                 src={n.image || logo}
@@ -219,7 +195,7 @@ export default function EsportsHome() {
                 </h4>
                 <p className="text-[var(--muted)] text-sm mt-1">{n.date}</p>
               </div>
-            </div>
+            </a>
           ))}
         </MobileCarousel>
       </section>
@@ -227,8 +203,6 @@ export default function EsportsHome() {
     </main>
   );
 }
-
-
 
 /* ---------------------------- SECTION TITLE ---------------------------- */
 function SectionTitle({ title, subtitle }: { title: string; subtitle: string }) {
@@ -245,7 +219,6 @@ function SectionTitle({ title, subtitle }: { title: string; subtitle: string }) 
   );
 }
 
-
 /* ---------------------------- TEAM CARD ---------------------------- */
 function TeamCard({ name }: { name: string }) {
   return (
@@ -257,7 +230,6 @@ function TeamCard({ name }: { name: string }) {
     </div>
   );
 }
-
 
 /* ---------------------------- MOBILE CAROUSEL ---------------------------- */
 function MobileCarousel({ children }: any) {

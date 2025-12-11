@@ -1,103 +1,57 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import logo from "@/public/logo.png";
 
 export default function HomeContent() {
-  const esportsUpdates = [
-    {
-      id: 1,
-      title: "MPL Weekly Recap",
-      excerpt: "Key match results, standings, and top plays from this week’s MPL action.",
-      slug: "/esports/mpl-weekly-recap",
-      image: "",
-    },
-    {
-      id: 2,
-      title: "M5 World Championship",
-      excerpt: "Full coverage of M5 — playoffs, brackets, highlights & predictions.",
-      slug: "/esports/m5-news",
-      image: "",
-    },
-    {
-      id: 3,
-      title: "Pro Player Spotlight",
-      excerpt: "Deep dives into pro strategies, hero picks and signature gameplay.",
-      slug: "/esports/player-spotlight",
-      image: "",
-    },
-  ];
+  const [loading, setLoading] = useState(true);
 
-  const mlbbEvents = [
-    {
-      id: 1,
-      title: "Lucky Spin – Epic Skin",
-      excerpt: "Try your luck and win the rotating Epic Skin of the month.",
-      image: "",
-    },
-    {
-      id: 2,
-      title: "Starlight Event",
-      excerpt: "See current Starlight skin, rewards, animations & bonuses.",
-      image: "",
-    },
-    {
-      id: 3,
-      title: "Recharge Bonus",
-      excerpt: "Get extra diamonds during limited-time recharge bonus events.",
-      image: "",
-    },
-  ];
+  const [stats, setStats] = useState<any[]>([]);
+  const [articles, setArticles] = useState<any[]>([]);
+  const [esportsUpdates, setEsportsUpdates] = useState<any[]>([]);
+  const [mlbbEvents, setMlbbEvents] = useState<any[]>([]);
+  const [categories, setCategories] = useState<any[]>([]);
 
-  const articles = [
-    {
-      id: 1,
-      title: "Best Assassin Builds for Ranked (2025)",
-      excerpt: "Top assassin builds dominating Mythic and above this season.",
-      slug: "/blogs/assassin-builds",
-      image: "",
-    },
-    {
-      id: 2,
-      title: "Updated MLBB Tier List – Season 29",
-      excerpt: "A complete breakdown of strongest heroes by role.",
-      slug: "/blogs/mlbb-tier-list",
-      image: "",
-    },
-    {
-      id: 3,
-      title: "M5 & MPL Highlights – Weekly Recap",
-      excerpt: "Top plays, major upsets, and esports storylines.",
-      slug: "/blogs/esports-weekly",
-      image: "",
-    },
-  ];
+  // ---------------- FETCH HOME DATA ----------------
+  useEffect(() => {
+    async function loadData() {
+      try {
+        const res = await fetch("/api/mlbb/home");
+        const data = await res.json();
 
-  const categories = [
-    { name: "Assassin", icon: "🗡️" },
-    { name: "Fighter", icon: "⚔️" },
-    { name: "Mage", icon: "✨" },
-    { name: "Marksman", icon: "🏹" },
-    { name: "Tank", icon: "🛡️" },
-    { name: "Support", icon: "💖" },
-  ];
+        setStats(data.stats || []);
+        setArticles(data.articles || []);
+        setEsportsUpdates(data.esportsUpdates || []);
+        setMlbbEvents(data.mlbbEvents || []);
+        setCategories(data.categories || []);
+      } catch (e) {
+        console.error("Failed to load home API", e);
+      } finally {
+        setLoading(false);
+      }
+    }
 
-  const stats = [
-    { number: "800+", label: "Wallpapers Uploaded" },
-    { number: "150+", label: "Blogs & Guides" },
-    { number: "100+", label: "Heroes & Skins Covered" },
-    { number: "Daily", label: "New Updates Posted" },
-  ];
+    loadData();
+  }, []);
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center text-xl font-bold">
+        Loading content...
+      </div>
+    );
+  }
 
   return (
     <section className="bg-[var(--background)] text-[var(--foreground)] relative z-10 overflow-hidden">
+
       {/* Background Glow */}
       <div className="absolute inset-0 pointer-events-none bg-[radial-gradient(circle_at_top_right,var(--accent)/10,transparent_60%),radial-gradient(circle_at_bottom_left,var(--accent-light,#00d8ff)/10,transparent_60%)] animate-pulse-slow" />
 
       {/* ===================== STATS ===================== */}
       <SectionWrapper>
-
         <div className="grid grid-cols-2 md:grid-cols-4 gap-10">
           {stats.map((stat, i) => (
             <div
@@ -115,7 +69,6 @@ export default function HomeContent() {
 
       {/* ===================== ABOUT ===================== */}
       <SectionWrapper>
-
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           <FeatureCard icon="🖼️" title="HD MLBB Wallpapers" text="Explore a curated library of 1080p, 2K, and 4K wallpapers updated regularly." />
           <FeatureCard icon="🎮" title="Esports Highlights" text="Stay updated with MPL, MSC, M-Series and tournament insights." />
@@ -196,7 +149,7 @@ export default function HomeContent() {
 }
 
 /* ========================================================= */
-/* REUSABLE COMPONENTS */
+/* REUSABLE COMPONENTS (unchanged) */
 /* ========================================================= */
 
 function SectionWrapper({ children, borderTop = false }: any) {

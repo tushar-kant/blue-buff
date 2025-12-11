@@ -11,30 +11,27 @@ const CATEGORY_COLORS: Record<string, string> = {
 };
 
 export default function EventsComingSoon() {
-  // ===== EVENTS DATA =====
-  const eventsData: Record<
-    string,
-    { name: string; image: string; category: string }
-  > = {
-    "2025-12-12": {
-      name: "Hero Discount Event",
-      image:
-        "https://res.cloudinary.com/dk0sslz1q/image/upload/v1762668036/bbdhr_agvtlc.jpg",
-      category: "discount",
-    },
-    "2025-12-07": {
-      name: "Lucky Draw Spin",
-      image: "",
-      category: "spin",
-    },
-    "2025-12-22": {
-      name: "MLBB Anniversary",
-      image: "",
-      category: "anniversary",
-    },
-  };
+  // ================== FETCH EVENTS FROM API ==================
+  const [eventsData, setEventsData] = useState<Record<string, any>>({});
+  const [loading, setLoading] = useState(true);
 
-  // Today
+  useEffect(() => {
+    async function loadEvents() {
+      try {
+        const res = await fetch("/api/mlbb/events");
+        const data = await res.json();
+        setEventsData(data.events || {});
+      } catch (err) {
+        console.error("Failed to load events", err);
+      } finally {
+        setLoading(false);
+      }
+    }
+    loadEvents();
+  }, []);
+
+  // ====================== ALL HOOKS MUST BE BEFORE ANY RETURN ======================
+
   const today = new Date();
   const todayDate = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(
     2,
@@ -46,42 +43,35 @@ export default function EventsComingSoon() {
   const [showOnlyEvents, setShowOnlyEvents] = useState(false);
   const [hideBanner, setHideBanner] = useState(false);
 
-  // MODAL STATES
   const [selectedDate, setSelectedDate] = useState<string | null>(null);
   const [selectedEvent, setSelectedEvent] = useState<any>(null);
   const [showModal, setShowModal] = useState(false);
 
-  // modalRef for outside-click
   const modalRef = useRef<HTMLDivElement | null>(null);
 
-  // close modal when clicking outside
+  // Outside click close modal
   useEffect(() => {
     function handleOutsideClick(e: MouseEvent) {
       if (modalRef.current && !modalRef.current.contains(e.target as Node)) {
         setShowModal(false);
       }
     }
-
-    if (showModal) {
-      document.addEventListener("mousedown", handleOutsideClick);
-    }
-
+    if (showModal) document.addEventListener("mousedown", handleOutsideClick);
     return () => document.removeEventListener("mousedown", handleOutsideClick);
   }, [showModal]);
 
-  // -------- LIMIT RANGE --------
+  // Month range limits
   const baseYear = today.getFullYear();
   const baseMonth = today.getMonth();
 
-  const minAllowed = baseYear * 12 + (baseMonth - 1); // 1 month back
-  const maxAllowed = baseYear * 12 + (baseMonth + 2); // 2 months next
-
+  const minAllowed = baseYear * 12 + (baseMonth - 1);
+  const maxAllowed = baseYear * 12 + (baseMonth + 2);
   const currentValue = year * 12 + month;
 
   const canGoPrev = currentValue > minAllowed;
   const canGoNext = currentValue < maxAllowed;
 
-  // -------- COUNTDOWN LOGIC --------
+  // Countdown Timer
   const [nextEventCountdown, setNextEventCountdown] = useState("");
 
   const futureEvents = Object.entries(eventsData)
@@ -115,7 +105,7 @@ export default function EventsComingSoon() {
     return () => clearInterval(interval);
   }, [nextEvent]);
 
-  // -------- CALENDAR BUILD --------
+  // Build Calendar
   const monthStart = new Date(year, month, 1);
   const monthEnd = new Date(year, month + 1, 0);
   const daysInMonth = monthEnd.getDate();
@@ -135,39 +125,45 @@ export default function EventsComingSoon() {
 
     if (showOnlyEvents && !event) continue;
 
-    calendarCells.push({
-      day,
-      fullDate,
-      event,
-    });
+    calendarCells.push({ day, fullDate, event });
   }
 
-  // EVENT LIST (only next 6 events)
+  // Upcoming Events List
   const eventList = Object.entries(eventsData)
     .map(([date, ev]) => ({ date, ...ev }))
     .filter((ev) => new Date(ev.date) >= today)
     .sort((a, b) => Number(new Date(a.date)) - Number(new Date(b.date)))
     .slice(0, 6);
 
+  // ======================================================
+  // NOW we can safely show loading state
+  // ======================================================
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center text-xl font-bold">
+        Loading events...
+      </div>
+    );
+  }
+
+  // ====================== UI ======================
   return (
     <main className="relative min-h-screen bg-[var(--background)] text-[var(--foreground)] px-4 py-10 md:px-6">
 
-      {/* ============= NEXT EVENT BANNER ============= */}
+      {/* Next Event Banner */}
       {nextEvent && !hideBanner && (
         <div className="relative w-full max-w-4xl mx-auto bg-[var(--card)] border border-[var(--accent)] rounded-xl shadow-md mb-6 p-4 md:p-5 flex items-center justify-between">
           <div>
             <h3 className="text-lg md:text-xl font-bold text-[var(--accent)]">
               ⏳ Next Event: {nextEvent.name}
             </h3>
-
             <p className="text-sm text-[var(--muted)] mt-1">
               Starts in <span className="font-semibold">{nextEventCountdown}</span>
             </p>
-
             <p className="text-xs md:text-sm text-[var(--muted)] mt-1">{nextEvent.date}</p>
           </div>
 
-          {/* Close Banner */}
           <button
             onClick={() => setHideBanner(true)}
             className="absolute top-2 right-2 p-2 bg-black/40 hover:bg-black/60 rounded-full text-white"
@@ -177,12 +173,12 @@ export default function EventsComingSoon() {
         </div>
       )}
 
-      {/* RANGE NOTE */}
+      {/* Range note */}
       <p className="text-center text-[var(--muted)] text-sm mb-4">
-        🔒 You can view only <b>1 previous month</b> and <b>2 next months</b> (4-month limit)
+        🔒 You can view only <b>1 previous month</b> and <b>2 next months</b>.
       </p>
 
-      {/* FILTER BUTTON */}
+      {/* Filter Button */}
       <div
         onClick={() => setShowOnlyEvents((prev) => !prev)}
         className="w-full max-w-5xl mx-auto flex justify-end mb-4 cursor-pointer"
@@ -192,25 +188,20 @@ export default function EventsComingSoon() {
         </div>
       </div>
 
-      {/* ============= MAIN LAYOUT ============= */}
+      {/* Main Layout */}
       <div className="w-full max-w-5xl mx-auto flex flex-col md:flex-row gap-8">
 
-        {/* ================= CALENDAR ================= */}
+        {/* Calendar */}
         <div className="w-full md:w-2/3">
-
           {/* Header */}
           <div className="flex justify-between items-center mb-6">
-
-            {/* PREV */}
             <button
               onClick={() => {
                 if (canGoPrev) {
                   if (month === 0) {
                     setMonth(11);
                     setYear((y) => y - 1);
-                  } else {
-                    setMonth((m) => m - 1);
-                  }
+                  } else setMonth((m) => m - 1);
                 }
               }}
               disabled={!canGoPrev}
@@ -227,16 +218,13 @@ export default function EventsComingSoon() {
               {new Date(year, month).toLocaleString("default", { month: "long" })} {year}
             </h2>
 
-            {/* NEXT */}
             <button
               onClick={() => {
                 if (canGoNext) {
                   if (month === 11) {
                     setMonth(0);
                     setYear((y) => y + 1);
-                  } else {
-                    setMonth((m) => m + 1);
-                  }
+                  } else setMonth((m) => m + 1);
                 }
               }}
               disabled={!canGoNext}
@@ -276,9 +264,7 @@ export default function EventsComingSoon() {
                       : "bg-[var(--card)] border-[var(--border)]"
                   } ${cell.fullDate === todayDate ? "ring-2 ring-[var(--accent)]" : ""}`}
                   style={{
-                    backgroundImage: cell.event?.image
-                      ? `url(${cell.event.image})`
-                      : "",
+                    backgroundImage: cell.event?.image ? `url(${cell.event.image})` : "",
                     backgroundSize: "cover",
                     backgroundPosition: "center",
                   }}
@@ -308,7 +294,7 @@ export default function EventsComingSoon() {
           </div>
         </div>
 
-        {/* ================= UPCOMING EVENTS (6 only) ================= */}
+        {/* Upcoming Events */}
         <div className="w-full md:w-1/3 bg-[var(--card)] border border-[var(--border)] rounded-xl p-4 shadow">
           <h3 className="text-xl font-bold mb-4">📅 Upcoming Events</h3>
 
@@ -334,14 +320,14 @@ export default function EventsComingSoon() {
         </div>
       </div>
 
-      {/* ================= EVENT MODAL ================= */}
+      {/* Event Modal */}
       {showModal && (
         <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex justify-center items-center z-50 px-4 animate-fadeIn">
           <div
             ref={modalRef}
             className="bg-[var(--card)] border border-[var(--border)] rounded-xl w-full max-w-md p-6 relative shadow-lg animate-fadeIn"
           >
-            {/* Close Button */}
+            {/* Close */}
             <button
               onClick={() => setShowModal(false)}
               className="absolute top-3 right-3 text-xl bg-black/30 hover:bg-black/50 text-white p-1 rounded-full"
@@ -353,7 +339,6 @@ export default function EventsComingSoon() {
               {selectedEvent ? selectedEvent.name : "No Event Today"}
             </h3>
 
-            {/* If Event Exists */}
             {selectedEvent ? (
               <>
                 <p className="text-sm text-[var(--muted)] mb-2">📅 {selectedDate}</p>
@@ -366,6 +351,14 @@ export default function EventsComingSoon() {
                   />
                 )}
 
+                {/* Desc */}
+                {selectedEvent.desc && (
+                  <p className="text-sm mb-3 text-[var(--foreground)]">
+                    {selectedEvent.desc}
+                  </p>
+                )}
+
+                {/* Category */}
                 <span
                   className={`px-3 py-1 rounded text-xs border ${
                     CATEGORY_COLORS[selectedEvent.category] ||
@@ -374,6 +367,18 @@ export default function EventsComingSoon() {
                 >
                   {selectedEvent.category}
                 </span>
+
+                {/* Link */}
+                {selectedEvent.link && (
+                  <a
+                    href={selectedEvent.link}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="mt-4 inline-flex items-center gap-1 text-[var(--accent)] hover:underline text-sm font-semibold"
+                  >
+                    🔗 View Details
+                  </a>
+                )}
               </>
             ) : (
               <>
@@ -381,20 +386,15 @@ export default function EventsComingSoon() {
                   There is no event on <b>{selectedDate}</b>.
                 </p>
 
-                {/* Next available event */}
                 {(() => {
                   const laterEvents = Object.entries(eventsData)
                     .filter(([date]) => new Date(date) > new Date(selectedDate!))
                     .sort(([a], [b]) => Number(new Date(a)) - Number(new Date(b)));
 
-                  if (laterEvents.length === 0) {
+                  if (laterEvents.length === 0)
                     return <p className="text-sm">No upcoming events.</p>;
-                  }
 
-                  const nextOne = {
-                    date: laterEvents[0][0],
-                    ...laterEvents[0][1],
-                  };
+                  const nextOne = { date: laterEvents[0][0], ...laterEvents[0][1] };
 
                   return (
                     <div className="mt-2 p-3 rounded-lg border border-[var(--border)]">
