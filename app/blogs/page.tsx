@@ -151,17 +151,18 @@ export default function BlogsHome() {
 
       </section>
 
+
       {/* ================= TOP ARTICLES ================= */}
       <SectionTitle title="🔥 Top Articles" />
 
       <section className="max-w-6xl mx-auto mt-6">
-        <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-6">
+        <MobileCarousel>
           {topArticles.map((t, i) => (
             <Link
               key={i}
               href={t.url}
               className="
-                block bg-white/5 p-4 rounded-xl 
+                block bg-white/5 p-4 rounded-xl min-w-[80%] md:min-w-0 snap-start
                 border border-white/10 
                 hover:border-[var(--accent)]/40 
                 hover:shadow-[0_0_25px_var(--accent)/30]
@@ -182,8 +183,9 @@ export default function BlogsHome() {
               <p className="text-[var(--muted)] text-sm">{t.date}</p>
             </Link>
           ))}
-        </div>
+        </MobileCarousel>
       </section>
+
 
       {/* ================= FEATURED GUIDE ================= */}
       <SectionTitle title="⭐ Featured Guide" />
@@ -226,17 +228,18 @@ export default function BlogsHome() {
         </Link>
       </section>
 
+
       {/* ================= LATEST BLOGS ================= */}
       <SectionTitle title="🆕 Latest Blogs" />
 
       <section className="max-w-6xl mx-auto mt-6">
-        <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-6">
+        <MobileCarousel>
           {latestBlogs.map((b, i) => (
             <Link
               key={i}
               href={b.url}
               className="
-                block rounded-2xl p-3 
+                block rounded-2xl p-3 min-w-[80%] md:min-w-0 snap-start
                 bg-white/5 border border-white/10 
                 hover:border-[var(--accent)]/40 
                 hover:shadow-[0_0_25px_var(--accent)/30]
@@ -257,7 +260,7 @@ export default function BlogsHome() {
               <p className="text-[var(--muted)] text-sm">{b.date}</p>
             </Link>
           ))}
-        </div>
+        </MobileCarousel>
       </section>
 
     </main>
@@ -288,5 +291,19 @@ function Tag({ children }: any) {
     >
       {children}
     </span>
+  );
+}
+
+/* ---------------------------- MOBILE CAROUSEL ---------------------------- */
+function MobileCarousel({ children }: any) {
+  return (
+    <div
+      className="
+        flex gap-6 overflow-x-auto snap-x snap-mandatory px-1 pb-4 
+        md:grid md:grid-cols-3 md:gap-6 md:px-0 md:pb-0 md:overflow-visible
+      "
+    >
+      {children}
+    </div>
   );
 }
